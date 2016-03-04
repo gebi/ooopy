@@ -45,7 +45,7 @@ if __name__ == '__main__' :
         , default = None
         )
     (options, args) = parser.parse_args ()
-    fields  = dict (arg.split ('=', 1) for arg in args)
+    fields  = dict (arg.decode("utf-8").split ('=', 1) for arg in args)
     infile  = options.input_file
     outfile = options.output_file
     if infile is None :
