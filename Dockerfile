@@ -1,3 +1,5 @@
+# build with: docker build -t ooopy .
+
 ###
 ## BUILD
 ###
