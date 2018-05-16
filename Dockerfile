@@ -1,12 +1,13 @@
-# build with: docker build -t ooopy .
+# build with: docker build --build-arg "MAINTAINER=My Name <My@Email>" -t ooopy .
 
 ###
 ## BUILD
 ###
 
+ARG MAINTAINER
+
 FROM debian:stretch
 ENV VERSION 1.11
-ENV MAINTAINER "Michael Gebetsroither <michael@mgeb.org>"
 LABEL maintainer=$MAINTAINER
 
 # install build dependencies
@@ -28,7 +29,7 @@ RUN set -ex \
 ###
 
 FROM debian:stretch
-LABEL maintainer="Michael Gebetsroither <michael@mgeb.org>"
+LABEL maintainer=$MAINTAINER
 
 # install runtime dependencies
 RUN set -ex \
