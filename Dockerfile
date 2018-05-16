@@ -28,13 +28,13 @@ RUN set -ex \
 ## RUNTIME
 ###
 
-FROM debian:stretch
+FROM debian:stretch-slim
 LABEL maintainer=$MAINTAINER
 
 # install runtime dependencies
 RUN set -ex \
     && apt-get update -q \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends python2.7 python
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends python2.7-minimal python
 
 COPY --from=0 /VERSION /
 COPY --from=0 /ooopy/deb_dist/python-ooopy_*_all.deb /
