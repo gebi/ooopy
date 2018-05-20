@@ -1,0 +1,69 @@
+#/bin/bash
+
+# bash script for merging open office document
+# for use with ooopy docker container
+# setup:
+# 1) create docker-image:
+#   docker build --build-arg "MAINTAINER=nyname" -t ooopy .
+# 2) merge your file
+#   ./merge.sh -i letter-template.odt -c letter.csv
+#
+# result is an open office file "letter-out.odt" with merged contents
+
+delimiter="|"
+
+while [[ "$#" > 0 ]]; do case $1 in
+  -d|--delimiter) delimiter="$2"; shift;;
+  -i|--infile) infile="$2"; shift;;
+  -o|--outfile) outfile="$2"; shift;;
+  -c|--csvfile) csvfile="$2"; shift;;
+  -a|--ascii) asciiout=1;;
+  -v|--verbose) verbose=1;;
+  -h|--help) cat <<-EOF
+USAGE: $FUNCNAME [OPTIONS] -i <file.odt> -c <data.csv> 
+  -i  --infile    infile (template file) with odt extension
+  -c  --csvfile   file with data (separated fields by delimiter)
+OPTIONS
+  -a  --ascii     additional output in plain in ascii on stdout
+  -d  --delimiter	delimiter in csv-file (default is |)
+  -v  --verbose   provides input how the script works
+  -h  --help      this help
+EOF
+exit 0;;
+  *) echo "Unknown parameter passed: $1"; exit 1;;
+esac; shift; done
+
+if [ "$infile" == "" ]; then
+  echo "infile missing. try -h"
+  exit 1;
+fi
+
+if [ "$outfile" == "" ]; then
+	outfile="${infile%.*}-out.odt"
+fi
+ 
+if [ "$csvfile" == "" ]; then
+	echo "error: csvfile missing. try -h"
+        exit 1;
+fi
+
+if [ "$verbose" == 1 ]; then
+	echo "Delmiter: $delimiter"
+	echo "Infile: $infile"
+	echo "Outfile: $outfile"
+	echo "csv-file: $csvfile"
+	echo "Additional output in ascii on stdout? $asciiout"
+	set -x
+fi
+
+
+docker run -it --rm --net none -v `pwd`:/tmp:rw ooopy ooo_mailmerge -d "$delimiter" -o /tmp/$outfile /tmp/$infile /tmp/$csvfile
+
+if [ "$asciiout" == 1 ]; then
+	docker run -it --rm --net none -v `pwd`:/tmp:ro ooopy ooo_as_text -n /tmp/$outfile
+else
+	unzipContent=`unzip -l $outfile >& /dev/null`
+	if [ "$?" != "0" ]; then
+	  echo "error in output file $outputfile"
+  fi
+fi
