@@ -21,8 +21,15 @@
 # ****************************************************************************
 
 # Run all given ooo files through ooo_as_text and grep -l for pattern
+bin_="$(basename $0)"
+if [ $# -eq 1 ]; then
+    if [ "$1" = "--help" ]; then
+        echo "Usage: $bin_ <pattern> <ooofile> ..."
+        exit 0
+    fi
+fi
 if [ $# -lt 2 ] ; then
-    echo "Usage: $0 <pattern> <ooofile> ..." 2>&1
+    echo "Usage: $bin_ <pattern> <ooofile> ..." 2>&1
     exit 42
 fi
 pattern=$1

@@ -1,0 +1,15 @@
+#!/bin/bash
+# Author: Michael Gebetsroither <michael@mgeb.org>
+
+# Repo is expected to be mounted to /mnt read-only
+# working directory writable is in /tmp where all tests will be executed
+
+cd /tmp
+
+for i in bin/ testfiles/ ooopy/ run_doctest.py; do
+    if [ ! -e $i ]; then
+        ln -s /mnt/$i .
+    fi
+done
+
+exec "$@"
