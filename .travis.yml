@@ -9,8 +9,9 @@ before_install:
   - docker build --build-arg "MAINTAINER=Michael Gebetsroither <michael@mgeb.org>" -t ooopy .
 
 script:
-  - docker run -it --rm ooopy ooo_mailmerge --help |grep 'Usage: ooo_mailmerge'
-  - docker run -it --rm -v `pwd`:/tmp:ro ooopy /tmp/run_tests
+  - docker run -it --rm -v `pwd`:/tmp:ro ooopy /tmp/run_tests binaries-callable
+  - docker run -it --rm -v `pwd`:/tmp:ro ooopy /tmp/run_tests unit-transformer
+  - docker run -it --rm -v `pwd`:/tmp:ro ooopy /tmp/run_tests unit-ooopy
 
 #deploy:
 #  provider: script

@@ -1,8 +1,33 @@
 #!/bin/bash
+# Author: Michael Gebetsroither <michael@mgeb.org>
 
 dir_="$(dirname $(readlink -f $0))"
-echo "Executing tests in directory: $dir_"
+#echo "Executing tests in directory: $dir_" >&2
 
 cd "$dir_" || exit 1
-/usr/bin/python ./run_doctest.py ooopy/Transformer.py
-/usr/bin/python ./run_doctest.py ooopy/OOoPy.py
+
+binaries-callable() {
+    ret_=0
+    for i in $(ls bin/*); do
+        out_="$($i --help)"
+        bin_="$(basename $i)"
+        if ! echo "$out_" |grep -q "Usage: $bin_"; then
+            ret_=1
+            echo "Error getting usage from: $bin_"
+            echo "$out_"
+        fi
+    done
+    exit $ret_
+}
+
+unit() {
+    t_="$1"
+    exec /usr/bin/python ./run_doctest.py "ooopy/$1"
+}
+
+case "$1" in
+    "binaries-callable") binaries-callable ;;
+    "unit-transformer") unit "Transformer.py" ;;
+    "unit-ooopy" ) unit "OOoPy.py" ;;
+    *) echo "Unknown test-name" >&2; exit 1 ;;
+esac
