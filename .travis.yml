@@ -9,6 +9,7 @@ before_install:
   - docker build --build-arg "MAINTAINER=Michael Gebetsroither <michael@mgeb.org>" -t ooopy .
 
 script:
+  - echo "VERSION = \"${VERSION}~$(git rev-parse --short HEAD)\"" >ooopy/Version.py
   - docker run -it --rm -v `pwd`:/mnt:ro ooopy /mnt/docker_wrapper /mnt/run_tests binaries-callable
   - docker run -it --rm -v `pwd`:/mnt:ro ooopy /mnt/docker_wrapper /mnt/run_tests unit-transformer
   - docker run -it --rm -v `pwd`:/mnt:ro ooopy /mnt/docker_wrapper /mnt/run_tests unit-ooopy
