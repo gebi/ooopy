@@ -1,0 +1,19 @@
+sudo: required
+
+language: bash
+
+services:
+  - docker
+
+before_install:
+  - docker build --build-arg "MAINTAINER=Michael Gebetsroither <michael@mgeb.org>" -t ooopy .
+
+script:
+  - docker run -it --rm ooopy ooo_mailmerge --help |grep 'Usage: ooo_mailmerge'
+  - docker run -it --rm -v `pwd`:/tmp:ro ooopy /tmp/run_tests
+
+#deploy:
+#  provider: script
+#  script: bash docker_push
+#  on:
+#    branch: master

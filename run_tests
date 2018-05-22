@@ -1,0 +1,8 @@
+#!/bin/bash
+
+dir_="$(dirname $(readlink -f $0))"
+echo "Executing tests in directory: $dir_"
+
+cd "$dir_" || exit 1
+/usr/bin/python ./run_doctest.py ooopy/Transformer.py
+/usr/bin/python ./run_doctest.py ooopy/OOoPy.py
