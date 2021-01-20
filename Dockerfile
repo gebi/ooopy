@@ -15,7 +15,7 @@
 
 ARG MAINTAINER
 
-FROM debian:stretch
+FROM debian:buster
 ENV VERSION 1.11
 LABEL maintainer=$MAINTAINER
 
@@ -43,7 +43,7 @@ RUN set -ex \
 ## RUNTIME
 ###
 
-FROM debian:stretch-slim
+FROM debian:buster-slim
 LABEL maintainer=$MAINTAINER
 
 # install runtime dependencies
