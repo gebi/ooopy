@@ -43,7 +43,7 @@ RUN set -ex \
 ## RUNTIME
 ###
 
-FROM debian:buster-slim
+FROM debian:10.10-slim
 LABEL maintainer=$MAINTAINER
 
 # install runtime dependencies
